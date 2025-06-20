@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .game-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            width: 80%;
+            font-size: 16px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .message {
+            color: #ff0000;
+        }
+
+        .success {
+            color: #008000;
+        }
+
+        .reset {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #ff9800;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .reset:hover {
+            background-color: #f57c00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Guess the Number</h1>
+        <p>I'm thinking of a number between 1 and 25. Can you guess it?</p>
+
+        <input type="number" id="userGuess" placeholder="Enter your guess" min="1" max="25">
+        <button onclick="checkGuess()">Guess</button>
+
+        <div class="feedback" id="feedback"></div>
+        <div id="attemptsDisplay">Takes: 0</div>
+
+
+        <button class="reset" onclick="resetGame()" style="display: none;">Play Again</button>
+    </div>
+
+    <script>
+        // Set the number to guess to 25
+        let numberToGuess = Math.floor(Math.random() * 25) + 1;
+        let attempts = 0;
+
+        // Function to check the user's guess
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById("userGuess").value);
+            const feedback = document.getElementById("feedback");
+
+            // Validate input
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 25) {
+                feedback.innerHTML = "Please enter a valid number between 1 and 25.";
+                feedback.classList.add("message");
+                return;
+            }
+
+            attempts++;
+            document.getElementById("attemptsDisplay").innerText = `Takes: ${attempts}`;
+
+
+            if (userGuess < numberToGuess) {
+                feedback.innerHTML = "Too low! Try again.";
+                feedback.classList.remove("message", "success");
+                feedback.classList.add("message");
+            } else if (userGuess > numberToGuess) {
+                feedback.innerHTML = "Too high! Try again.";
+                feedback.classList.remove("message", "success");
+                feedback.classList.add("message");
+            } else {
+                feedback.innerHTML = `Congratulations! You've guessed the number in ${attempts} tries.`;
+                feedback.classList.remove("message");
+                feedback.classList.add("success");
+
+                // Show the "Play Again" button
+                document.querySelector(".reset").style.display = "inline-block";
+            }
+        }
+
+        // Function to reset the game
+        function resetGame() {
+            // Number is still 25, attempts are reset
+            attempts = 0;
+            document.getElementById("userGuess").value = '';
+            document.getElementById("feedback").innerHTML = '';
+            document.getElementById("userGuess").disabled = false;
+            document.querySelector("button").disabled = false;
+            document.querySelector(".reset").style.display = "none";
+            document.getElementById("attemptsDisplay").innerText = "Takes: 0";
+            //console.log("Shhh... the number is", numberToGuess);
+            
+        }
+        window.onload = resetGame;
+
+    </script>
+
+</body>
+</html>
